@@ -8,6 +8,7 @@ use App\Models\Tag;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -50,8 +51,15 @@ class PostController extends Controller
         $post->fill($data);
 
         $post->user_id = Auth::id();
-
+        
+        if(array_key_exists('image', $data)){
+            $link = Storage::put('posts', $data['image']);
+            $post->image = $link;
+        }
+        
         $post->save();
+
+
         if(array_key_exists('tags', $data)){
             $post->tags()->attach($data['tags']);
 
@@ -99,6 +107,12 @@ class PostController extends Controller
     {
         $data = $request->all();
 
+        if(array_key_exists('image', $data)){
+            if($post->image) Storage::delete($post->image);
+            $link = Storage::put('posts', $data['image']);
+            $post->image = $link;
+        }
+
         $post->update($data);
 
         if(array_key_exists('tags', $data)){
@@ -119,6 +133,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if($post->image) Storage::delete($post->image);
+        
         $post->delete();
 
         return redirect()->route('admin.posts.index')->with('message', 'Post eliminato con successo');

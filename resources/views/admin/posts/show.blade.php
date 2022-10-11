@@ -8,7 +8,7 @@
 
     <div>
         @if($post->image)
-            <img src="{{ $post->image }}" alt="post-image" class="float-left mr-3 img-fluid">
+            <img src="{{ asset('storage/'.$post->image) }}" alt="post-image" class="float-left mr-3 img-fluid">
         @endif
         <p>{{ $post->content }}</p>
     </div>

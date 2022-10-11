@@ -1,5 +1,5 @@
 @if($post->exists)
-<form action="{{ route('admin.posts.update', $post->id) }}" method="POST">
+<form action="{{ route('admin.posts.update', $post->id) }}" enctype="multipart/form-data" method="POST">
     @method('PUT')
 @else
 <form action="{{ route('admin.posts.store') }}" method="POST">
@@ -41,7 +41,7 @@
         
             <div class="form-group">
                 <label for="image">Immagine</label>
-                <input type="text" class="form-control" id="image" name="image" value="{{ old('image', $post->image) }}">
+                <input type="file" id="image" class="form-control-file" name="image" value="{{ old('image', $post->image) }}">
             </div>
         </div>
         <div class="col-12 d-flex justify-content-around align-items-center">
